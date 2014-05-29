@@ -358,6 +358,7 @@ result = crypto.des_mac(des3key, plain);
 logging(result.toString('hex'));
 logging(cipher.toString('hex'));
 assert(result.toString('hex') == cipher.toString('hex'));
+
 logging('-------------------------------------------------------------------------------------------------------------');
 
 
@@ -392,6 +393,5 @@ assert(result.toString('hex') == cipher.toString('hex'));
 logging(cipher.toString('hex'));
 logging(result.toString('hex'));
 assert(result.toString('hex') == cipher.toString('hex'));
-
 
 logging('-------------------------------------------------------------------------------------------------------------');

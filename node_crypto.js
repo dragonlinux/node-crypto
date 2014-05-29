@@ -1,5 +1,5 @@
 /**
- * Created by UBIVELOX on 2014-05-26.
+ * Created by coolbong on 2014-05-26.
  */
 
 var crypto = require('crypto');
@@ -248,7 +248,7 @@ function aes_cbc_encrypt(key, input) {
         //256 bit cbc mode
         cipherType = 'des-ede3-cbc'
     } else {
-        console.log('key length is invalid. must set to be 8, 16, 24');
+        console.log('key length is invalid. must set to be 16, 24, 32');
         return null;
     }
 
@@ -275,7 +275,7 @@ function aes_cbc_decrypt(key, input) {
         //256 bit cbc mode
         cipherType = 'aes-256-cbc';
     } else {
-        console.log('key length is invalid. must set to be 8, 16, 24');
+        console.log('key length is invalid. must set to be 16, 24, 32');
         return null;
     }
     var decipher = crypto.createDecipheriv(cipherType, key, '');
@@ -305,7 +305,7 @@ function aes_ctr_encrypt(key, input, iv) {
         //256 bit ctr mode
         cipherType = 'aes-256-ctr'
     } else {
-        console.log('key length is invalid. must set to be 8, 16, 24');
+        console.log('key length is invalid. must set to be 16, 24, 32');
         return null;
     }
 
@@ -332,7 +332,7 @@ function aes_ctr_decrypt(key, input, iv) {
         //256 bit ctr mode
         cipherType = 'aes-256-ctr';
     } else {
-        console.log('key length is invalid. must set to be 8, 16, 24');
+        console.log('key length is invalid. must set to be 16, 24. 32');
         return null;
     }
     var decipher = crypto.createDecipheriv(cipherType, key, iv);
