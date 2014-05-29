@@ -336,8 +336,9 @@ key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
 plain = new Buffer("00010203040506074041424344454647", 'hex');
 iv    = new Buffer("0000000000000000", 'hex');
 
-cipher = crypto.des_cbc_encrypt(key, plain, iv);
-cipher = cipher.slice(8, 16);
+plain_padd = crypto.des_padding(plain);
+cipher = crypto.des_cbc_encrypt(key, plain_padd, iv);
+cipher = cipher.slice(cipher.length-8, cipher.length);
 
 result = crypto.des_mac(key, plain);
 logging(cipher.toString('hex'));
@@ -345,6 +346,8 @@ logging(result.toString('hex'));
 assert(result.toString('hex') == cipher.toString('hex'));
 
 
+
+/*
 plain = new Buffer("Hello World !!!!", 'ascii');
 
 block1 = plain.slice(0, 8);
@@ -355,9 +358,25 @@ cipher = xor(block2, cipher);
 cipher = crypto.des_ecb_encrypt(des3key, cipher);
 
 result = crypto.des_mac(des3key, plain);
-logging(result.toString('hex'));
 logging(cipher.toString('hex'));
+logging(result.toString('hex'));
 assert(result.toString('hex') == cipher.toString('hex'));
+*/
+
+
+//"000102030405060708090A0B0C0D0E0F8000000000000000"
+key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
+host_challenge = new Buffer("0001020304050607", 'hex');
+card_challege = new Buffer("08090A0B0C0D0E0F", 'hex');
+
+//cipher = new Buffer("E1F68FB810397A2F", 'hex');
+cipher = new Buffer("D0AEF0167D590E74", 'hex');
+plain = Buffer.concat([host_challenge, card_challege]);
+
+result = crypto.des_mac(key, plain);
+logging(cipher.toString('hex'));
+logging(result.toString('hex'));
+//assert(result.toString('hex') == cipher.toString('hex'));
 
 logging('-------------------------------------------------------------------------------------------------------------');
 

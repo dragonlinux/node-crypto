@@ -371,7 +371,8 @@ function des_mac(key, data) {
     var iv = new Buffer(8);
     iv.fill(0);
     var result = des_cbc_encrypt(key, data, iv);
-    return result.slice(8, 16);
+    //return result.slice(8, 16);
+    return result.slice(result.length-8, result.length);
 }
 
 /**
@@ -396,11 +397,12 @@ function des_mac_emv(key, data){
  * @param buff
  */
 function des_padding(buff) {
-    var targetlen  = 8 - (buff.length % 8);
+    var targetlen  = (8 - ((buff.length + 1) % 8)) + 1;
     var extra_buf = new Buffer(targetlen);
     extra_buf.fill(0);
     var pad_buf = Buffer.concat([buff, extra_buf]);
     pad_buf[buff.length] = 0x80;
+    //console.log('des_padding: ' + pad_buf.toString('hex'));
     return pad_buf;
 }
 
@@ -446,6 +448,7 @@ module.exports  = {
     aes_ctr_decrypt: aes_ctr_decrypt,
 
     //mac
+    des_padding: des_padding,
     hmac: hmac,
     des_mac: des_mac,
     des_mac_emv: des_mac_emv,
