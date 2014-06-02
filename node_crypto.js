@@ -82,7 +82,7 @@ function des_ecb_encrypt(key, input) {
 
     var cipher = crypto.createCipheriv(cipherType, key, '');
     cipher.setAutoPadding(false);
-    return cipher.update(input, '');
+    return cipher.update(input);
 }
 
 /**
@@ -108,7 +108,7 @@ function des_ecb_decrypt(key, input) {
     }
     var decipher = crypto.createDecipheriv(cipherType, key, '');
     decipher.setAutoPadding(false);
-    return decipher.update(input, '');
+    return decipher.update(input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -139,9 +139,8 @@ function des_cbc_encrypt(key, input, iv) {
     }
 
     var cipher = crypto.createCipheriv(cipherType, key, iv);
-    //cipher.setAutoPadding(false);
-    cipher.setAutoPadding(true);
-    return cipher.update(input, '');
+    cipher.setAutoPadding(false);
+    return cipher.update(input);
 }
 
 /**
@@ -168,7 +167,7 @@ function des_cbc_decrypt(key, input, iv) {
     }
     var decipher = crypto.createDecipheriv(cipherType, key, iv);
     decipher.setAutoPadding(false);
-    return decipher.update(input, '');
+    return decipher.update(input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -198,7 +197,7 @@ function aes_ecb_encrypt(key, input) {
 
     var cipher = crypto.createCipheriv(cipherType, key, '');
     cipher.setAutoPadding(false);
-    return cipher.update(input, '');
+    return cipher.update(input);
 }
 
 /**
@@ -224,7 +223,7 @@ function aes_ecb_decrypt(key, input) {
     }
     var decipher = crypto.createDecipheriv(cipherType, key, '');
     decipher.setAutoPadding(false);
-    return decipher.update(input, '');
+    return decipher.update(input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -254,7 +253,7 @@ function aes_cbc_encrypt(key, input) {
 
     var cipher = crypto.createCipheriv(cipherType, key, '');
     cipher.setAutoPadding(false);
-    return cipher.update(input, '');
+    return cipher.update(input);
 }
 
 /**
@@ -280,7 +279,7 @@ function aes_cbc_decrypt(key, input) {
     }
     var decipher = crypto.createDecipheriv(cipherType, key, '');
     decipher.setAutoPadding(false);
-    return decipher.update(input, '');
+    return decipher.update(input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -311,7 +310,7 @@ function aes_ctr_encrypt(key, input, iv) {
 
     var cipher = crypto.createCipheriv(cipherType, key, iv);
     cipher.setAutoPadding(false);
-    return cipher.update(input, '');
+    return cipher.update(input);
 }
 /**
  *
@@ -337,7 +336,7 @@ function aes_ctr_decrypt(key, input, iv) {
     }
     var decipher = crypto.createDecipheriv(cipherType, key, iv);
     decipher.setAutoPadding(false);
-    return decipher.update(input, '');
+    return decipher.update(input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
