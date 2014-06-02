@@ -210,9 +210,8 @@ logging('des_cbc_encrypt--------------------------------------------------------
 
 
 //Single DES CBC encrypt
-var plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
-var iv = new Buffer("59D9839733B8455D", 'hex');
-var v;
+plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
+iv = new Buffer("59D9839733B8455D", 'hex');
 
 v = plain.slice(0, 8);
 v = xor(v, iv);

@@ -357,6 +357,7 @@ function hmac(type, key, data) {
 
 
 /**
+ * Full Triple Des MAC
  * FIPS PUB 113 Computer Data Authentication is a (now obsolete) U.S. government standard that specified the CBC-MAC algorithm using DES as the block cipher.
  * The CBC-MAC algorithm is equivalent to ISO/IEC 9797-1 MAC Algorithm 1.
  * http://en.wikipedia.org/wiki/CBC-MAC
@@ -451,5 +452,5 @@ module.exports  = {
     des_padding: des_padding,
     hmac: hmac,
     des_mac: des_mac,
-    des_mac_emv: des_mac_emv,
+    des_mac_emv: des_mac_emv
 };
