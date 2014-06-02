@@ -138,6 +138,11 @@ function des_cbc_encrypt(key, input, iv) {
         return null;
     }
 
+    if(iv === undefined) {
+        iv = new Buffer(8);
+        iv.fill(0);
+    }
+
     var cipher = crypto.createCipheriv(cipherType, key, iv);
     cipher.setAutoPadding(false);
     return cipher.update(input);
@@ -165,6 +170,12 @@ function des_cbc_decrypt(key, input, iv) {
         console.log('key length is invalid. must set to be 8, 16, 24');
         return null;
     }
+
+    if(iv === undefined){
+        iv = new Buffer(8);
+        iv.fill(0);
+    }
+
     var decipher = crypto.createDecipheriv(cipherType, key, iv);
     decipher.setAutoPadding(false);
     return decipher.update(input);
@@ -371,7 +382,6 @@ function des_mac(key, data) {
     var iv = new Buffer(8);
     iv.fill(0);
     var result = des_cbc_encrypt(key, data, iv);
-    //return result.slice(8, 16);
     return result.slice(result.length-8, result.length);
 }
 
