@@ -492,6 +492,7 @@ module.exports  = {
 
     //random
     random: random,
+    pseudoRandom: pseudoRandom,
 
     //des
     des_ecb_encrypt: des_ecb_encrypt,
