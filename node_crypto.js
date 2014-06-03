@@ -246,23 +246,28 @@ function aes_ecb_decrypt(key, input) {
  * @param {Buffer} input
  * @returns {Buffer}
  */
-function aes_cbc_encrypt(key, input) {
+function aes_cbc_encrypt(key, input, iv) {
     var cipherType = '';
     if( key.length == 16) {
         //128 bit cbc mode
-        cipherType = 'des-cbc';
+        cipherType = 'aes-128-cbc';
     } else if( key.length == 24) {
         //192 bit cbc mode
-        cipherType = 'des-ede-cbc';
+        cipherType = 'aes-192-cbc';
     } else if (key.length == 32) {
         //256 bit cbc mode
-        cipherType = 'des-ede3-cbc'
+        cipherType = 'aes-256-cbc';
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
         return null;
     }
 
-    var cipher = crypto.createCipheriv(cipherType, key, '');
+    if(iv === undefined){
+        iv = new Buffer(16);
+        iv.fill(0);
+    }
+
+    var cipher = crypto.createCipheriv(cipherType, key, iv);
     cipher.setAutoPadding(false);
     return cipher.update(input);
 }
@@ -273,7 +278,7 @@ function aes_cbc_encrypt(key, input) {
  * @param {Buffer} input
  * @returns {Buffer}
  */
-function aes_cbc_decrypt(key, input) {
+function aes_cbc_decrypt(key, input,iv) {
     var cipherType = '';
     if( key.length == 16) {
         //128 bit ecb mode
@@ -288,7 +293,11 @@ function aes_cbc_decrypt(key, input) {
         console.log('key length is invalid. must set to be 16, 24, 32');
         return null;
     }
-    var decipher = crypto.createDecipheriv(cipherType, key, '');
+    if(iv === undefined){
+        iv = new Buffer(16);
+        iv.fill(0);
+    }
+    var decipher = crypto.createDecipheriv(cipherType, key, iv);
     decipher.setAutoPadding(false);
     return decipher.update(input);
 }
@@ -345,6 +354,7 @@ function aes_ctr_decrypt(key, input, iv) {
         console.log('key length is invalid. must set to be 16, 24. 32');
         return null;
     }
+
     var decipher = crypto.createDecipheriv(cipherType, key, iv);
     decipher.setAutoPadding(false);
     return decipher.update(input);
@@ -390,7 +400,11 @@ function des_mac(key, data) {
  * This is also known as the Retail MAC. It is as defined in [ISO 9797-1] as MAC Algorithm 3 with output
  * transformation 3, without truncation, and with DES taking the place of the block cipher.
  */
-function des_mac_emv(key, data){
+function des_mac_emv(key, data, needpadding){
+    if(needpadding !== undefined || needpadding == true) {
+        data = des_padding(data);
+    }
+
     var key1 = key.slice(0, 8); // for single des key
     var iv = new Buffer(8);
     iv.fill(0);
@@ -402,18 +416,46 @@ function des_mac_emv(key, data){
     return des_ecb_encrypt(key, cipher);
 }
 
+
+/**
+ * \
+ * @param key
+ * @param data
+ */
+function aes_mac(key, data) {
+    //http://www.rfc-base.org/txt/rfc-4493.txt
+    //http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
+    var result = aes_cbc_encrypt(key, data);
+    return result.slice(result.length-16, result.length);
+}
+
 /**
  *
- * @param buff
+ * @param {buffer} buff
+ * @return {buffer}
  */
 function des_padding(buff) {
-    var targetlen  = (8 - ((buff.length + 1) % 8)) + 1;
-    var extra_buf = new Buffer(targetlen);
+    var target_len  = (8 - ((buff.length + 1) % 8)) + 1;
+    var extra_buf = new Buffer(target_len);
     extra_buf.fill(0);
     var pad_buf = Buffer.concat([buff, extra_buf]);
     pad_buf[buff.length] = 0x80;
     //console.log('des_padding: ' + pad_buf.toString('hex'));
     return pad_buf;
+}
+
+/**
+ *
+ * @param {buffer} buff
+ * @return {buffer}
+ */
+function aes_padding(buff) {
+    var target_len  = (16 - ((buff.length + 1) % 16)) + 1;
+    var extra_buf = new Buffer(target_len);
+    extra_buf.fill(0);
+    var data_with_padding = Buffer.concat([buff, extra_buf]);
+    data_with_padding[buff.length] = 0x80;
+    return data_with_padding;
 }
 
 /**
@@ -458,8 +500,16 @@ module.exports  = {
     aes_ctr_decrypt: aes_ctr_decrypt,
 
     //mac
-    des_padding: des_padding,
     hmac: hmac,
     des_mac: des_mac,
-    des_mac_emv: des_mac_emv
+    des_mac_emv: des_mac_emv,
+    aes_mac: aes_mac,
+
+    //padding
+    des_padding: des_padding,
+    aes_padding: aes_padding,
+
+
+    //util
+    xor: xor
 };

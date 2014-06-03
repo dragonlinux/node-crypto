@@ -413,3 +413,24 @@ logging(result.toString('hex'));
 assert(result.toString('hex') == cipher.toString('hex'));
 
 logging('-------------------------------------------------------------------------------------------------------------');
+
+
+logging('aes mac    --------------------------------------------------------------------------------------------------');
+// AES MAC Make key a 128 bit AES key
+key = new Buffer("000102030405060708090A0B0C0D0E0F", 'hex');
+plain = new Buffer("01234567890123456789012345678901", 'ascii');
+
+plain_front = plain.slice(0, 16);
+plain_end = plain.slice(16, plain.length);
+
+cipher = crypto.aes_ecb_encrypt(key, plain_front);
+cipher = crypto.xor(cipher, plain_end);
+cipher = crypto.aes_ecb_encrypt(key, cipher);
+
+result = crypto.aes_mac(key, plain);
+
+logging(cipher.toString('hex'));
+logging(result.toString('hex'));
+assert(result.toString('hex') == cipher.toString('hex'));
+
+logging('-------------------------------------------------------------------------------------------------------------');
