@@ -49,11 +49,20 @@ function hash( /* Buffer */ hash, /* Buffer */buff) {
 
 /**
  *
- * @param length
+ * @param {number} length
  * @returns {Buffer}
  */
 function random(/*number*/length) {
     return crypto.randomBytes(length);
+}
+
+/**
+ *
+ * @param {number} length
+ * @returns {buffer}
+ */
+function pseudoRandom(/*number*/ length) {
+    return crypto.pseudoRandomBytes(length);
 }
 //----------------------------------------------------------------------------------------------------------------------
 // des - ecb
