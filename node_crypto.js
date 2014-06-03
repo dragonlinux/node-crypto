@@ -36,8 +36,8 @@ function getSupportedCipher() {
 /**
  *
  * @param {String} hash
- * @param {Buffer} buff
- * @returns {Buffer}
+ * @param {buffer} buff
+ * @returns {buffer}
  */
 function hash( /* Buffer */ hash, /* Buffer */buff) {
     return crypto.createHash(hash).update(buff).digest();
@@ -50,7 +50,7 @@ function hash( /* Buffer */ hash, /* Buffer */buff) {
 /**
  *
  * @param {number} length
- * @returns {Buffer}
+ * @returns {buffer}
  */
 function random(/*number*/length) {
     return crypto.randomBytes(length);
@@ -69,9 +69,9 @@ function pseudoRandom(/*number*/ length) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function des_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -96,9 +96,9 @@ function des_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function des_ecb_decrypt(key, input) {
     var cipherType = '';
@@ -125,10 +125,10 @@ function des_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function des_cbc_encrypt(key, input, iv) {
     //FXME try catch
@@ -159,10 +159,10 @@ function des_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function des_cbc_decrypt(key, input, iv) {
     var cipherType = '';
@@ -195,9 +195,9 @@ function des_cbc_decrypt(key, input, iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function aes_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -222,9 +222,9 @@ function aes_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function aes_ecb_decrypt(key, input) {
     var cipherType = '';
@@ -251,9 +251,10 @@ function aes_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_cbc_encrypt(key, input, iv) {
     var cipherType = '';
@@ -283,9 +284,10 @@ function aes_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_cbc_decrypt(key, input,iv) {
     var cipherType = '';
@@ -316,10 +318,10 @@ function aes_cbc_decrypt(key, input,iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_ctr_encrypt(key, input, iv) {
     var cipherType = '';
@@ -343,10 +345,10 @@ function aes_ctr_encrypt(key, input, iv) {
 }
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_ctr_decrypt(key, input, iv) {
     var cipherType = '';
@@ -394,7 +396,7 @@ function hmac(type, key, data) {
  *
  * @param key
  * @param data
- * @return {Buffer}
+ * @return {buffer}
  */
 function des_mac(key, data) {
     data = des_padding(data);
@@ -469,9 +471,9 @@ function aes_padding(buff) {
 
 /**
  *
- * @param {Buffer} arr1
- * @param {Buffer} arr2
- * @returns {Buffer}
+ * @param {buffer} arr1
+ * @param {buffer} arr2
+ * @returns {buffer}
  */
 function xor(arr1, arr2) {
     var ret = [];
