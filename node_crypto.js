@@ -560,7 +560,7 @@ function aes_cmac(key, data) {
     }
 
     //Step 5. X = const_zero
-    //var X= const_zero;
+    var X= const_zero;
 
     var Y;
 
@@ -572,7 +572,7 @@ function aes_cmac(key, data) {
     var M_i;
     for(var i=0; i<n-1; i++) {
         M_i = M.slice(i * const_Bsize);
-        Y = xor(const_zero, M_i);
+        Y = xor(X, M_i);
         X = aes_cbc_encrypt(key, Y);
     }
     Y = xor(M_last, X);
