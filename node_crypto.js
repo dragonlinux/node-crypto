@@ -578,11 +578,6 @@ function aes_cmac(key, data) {
     Y = xor(M_last, X);
     //Step 7. return T
     return aes_cbc_encrypt(key, Y);
-/*
-    var result = new Buffer(16);
-    result.fill(0);
-    return result;
-*/
 }
 
 /**

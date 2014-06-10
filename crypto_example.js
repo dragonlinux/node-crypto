@@ -435,10 +435,6 @@ assert(result.toString('hex') == cipher.toString('hex'));
 logging('-------------------------------------------------------------------------------------------------------------');
 
 logging('aes cmac    -------------------------------------------------------------------------------------------------');
-
-
-
-
 //AES CMAC
 //Make key a 128 bit AES key
 key = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
@@ -462,12 +458,3 @@ logging(result.toString('hex'));
 //assert(result.toString('hex') == cipher.toString('hex'));
 
 logging('-------------------------------------------------------------------------------------------------------------');
-
-
-
-//key = new Buffer('0101', 'hex');
-key = new Buffer('0180', 'hex');
-//key = new Buffer('0100', 'hex');
-cipher = crypto.shift_left_1(key);
-console.log(key.toString('hex'));
-console.log(cipher.toString('hex'));
