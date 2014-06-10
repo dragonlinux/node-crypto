@@ -441,20 +441,33 @@ logging('aes cmac    -----------------------------------------------------------
 
 //AES CMAC
 //Make key a 128 bit AES key
-key = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
-plain = new Buffer("6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411", 'hex');
-cipher = new Buffer("DFA66747DE9AE63030CA32611497C827", 'hex');
+//key = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
+//plain = new Buffer("6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411", 'hex');
+//cipher = new Buffer("DFA66747DE9AE63030CA32611497C827", 'hex');
 
+//result = crypto.aes_cmac(key, plain);
+
+//logging(cipher.toString('hex'));
+//logging(result.toString('hex'));
+//assert(result.toString('hex') == cipher.toString('hex'));
+
+key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
+plain = new Buffer("000000000000000000000006000080010000000000000000B53CA38AD92EEFE5", 'hex');
+
+cipher = new Buffer('ADFC43E1BFD7F3048987695748F56D99', 'hex');
 result = crypto.aes_cmac(key, plain);
 
 logging(cipher.toString('hex'));
 logging(result.toString('hex'));
 //assert(result.toString('hex') == cipher.toString('hex'));
 
-//key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
-//plain = new Buffer("000000000000000000000004000080010000000000000000B53CA38AD92EEFE5", 'hex');
-
-key = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
-console.log(crypto.aes_padding(key));
-console.log(crypto.aes_test_pad(key));
 logging('-------------------------------------------------------------------------------------------------------------');
+
+
+
+//key = new Buffer('0101', 'hex');
+key = new Buffer('0180', 'hex');
+//key = new Buffer('0100', 'hex');
+cipher = crypto.shift_left_1(key);
+console.log(key.toString('hex'));
+console.log(cipher.toString('hex'));
