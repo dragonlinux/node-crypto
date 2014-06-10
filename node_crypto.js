@@ -434,10 +434,59 @@ function des_mac_emv(key, data, needpadding){
  * @param data
  */
 function aes_mac(key, data) {
-    //http://www.rfc-base.org/txt/rfc-4493.txt
-    //http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
+    //http://en.wikipedia.org/wiki/CMAC
     var result = aes_cbc_encrypt(key, data);
     return result.slice(result.length-16, result.length);
+}
+
+
+///AES CMAC
+
+function MSB(buf) {
+    return (buf[0] & 0x80) ? 1 : 0;
+}
+
+function shift_left(buf, cnt) {
+
+}
+
+function generate_subkey(K) {
+
+    //var const_zero = new Buffer(16);
+    //const_zero.fill(0);
+
+    var const_zero = new Buffer('00000000000000000000000000000000', 'hex');
+    var const_Rb   = new Buffer('00000000000000000000000000000087', 'hex');
+
+    //Step 1. L = aes-128(K, consta_zero)
+    var L = aes_cbc_encrypt(K, const_zero);
+
+    //Step 2. if MSB(L) == 0
+    //        then K1 = L << 1
+    //        else K1 = (L << 1) XOR const Rb
+    var K1;
+    if(MSB(L) == 0) {
+        K1 = L << 1;
+    }
+
+
+
+    //Step 3. if MSB(K1) == 0
+    //        then K2 = K1 << 1
+    //        else K2 = (K1 << 1) XOR const Rb
+
+    //Step 4. return k1, k2
+}
+
+
+
+function aes_cmac(key, data) {
+    //RFC 4493 http://www.ietf.org/rfc/rfc4493.txt
+    //NIST SP 800-38B http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
+    //FIXME plz implement me
+    var result = new Buffer(16);
+    result.fill(0);
+    return result;
 }
 
 /**
@@ -467,6 +516,7 @@ function aes_padding(buff) {
     var data_with_padding = Buffer.concat([buff, extra_buf]);
     data_with_padding[buff.length] = 0x80;
     return data_with_padding;
+
 }
 
 /**
@@ -516,6 +566,7 @@ module.exports  = {
     des_mac: des_mac,
     des_mac_emv: des_mac_emv,
     aes_mac: aes_mac,
+    aes_cmac: aes_cmac,
 
     //padding
     des_padding: des_padding,
