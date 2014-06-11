@@ -36,8 +36,8 @@ function getSupportedCipher() {
 /**
  *
  * @param {String} hash
- * @param {Buffer} buff
- * @returns {Buffer}
+ * @param {buffer} buff
+ * @returns {buffer}
  */
 function hash( /* Buffer */ hash, /* Buffer */buff) {
     return crypto.createHash(hash).update(buff).digest();
@@ -49,20 +49,29 @@ function hash( /* Buffer */ hash, /* Buffer */buff) {
 
 /**
  *
- * @param length
- * @returns {Buffer}
+ * @param {number} length
+ * @returns {buffer}
  */
 function random(/*number*/length) {
     return crypto.randomBytes(length);
+}
+
+/**
+ *
+ * @param {number} length
+ * @returns {buffer}
+ */
+function pseudoRandom(/*number*/ length) {
+    return crypto.pseudoRandomBytes(length);
 }
 //----------------------------------------------------------------------------------------------------------------------
 // des - ecb
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function des_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -87,9 +96,9 @@ function des_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function des_ecb_decrypt(key, input) {
     var cipherType = '';
@@ -116,10 +125,10 @@ function des_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function des_cbc_encrypt(key, input, iv) {
     //FXME try catch
@@ -150,10 +159,10 @@ function des_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function des_cbc_decrypt(key, input, iv) {
     var cipherType = '';
@@ -186,9 +195,9 @@ function des_cbc_decrypt(key, input, iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function aes_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -213,9 +222,9 @@ function aes_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @returns {buffer}
  */
 function aes_ecb_decrypt(key, input) {
     var cipherType = '';
@@ -242,9 +251,10 @@ function aes_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_cbc_encrypt(key, input, iv) {
     var cipherType = '';
@@ -274,9 +284,10 @@ function aes_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_cbc_decrypt(key, input,iv) {
     var cipherType = '';
@@ -307,10 +318,10 @@ function aes_cbc_decrypt(key, input,iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_ctr_encrypt(key, input, iv) {
     var cipherType = '';
@@ -334,10 +345,10 @@ function aes_ctr_encrypt(key, input, iv) {
 }
 /**
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @param {Buffer} iv
- * @returns {Buffer}
+ * @param {buffer} key
+ * @param {buffer} input
+ * @param {buffer} iv
+ * @returns {buffer}
  */
 function aes_ctr_decrypt(key, input, iv) {
     var cipherType = '';
@@ -385,7 +396,7 @@ function hmac(type, key, data) {
  *
  * @param key
  * @param data
- * @return {Buffer}
+ * @return {buffer}
  */
 function des_mac(key, data) {
     data = des_padding(data);
@@ -423,10 +434,150 @@ function des_mac_emv(key, data, needpadding){
  * @param data
  */
 function aes_mac(key, data) {
-    //http://www.rfc-base.org/txt/rfc-4493.txt
-    //http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
+    //http://en.wikipedia.org/wiki/CMAC
     var result = aes_cbc_encrypt(key, data);
     return result.slice(result.length-16, result.length);
+}
+
+
+///AES CMAC
+function MSB(buf) {
+    var tmp ;
+    if(buf instanceof Buffer || buf instanceof Array) {
+        tmp = buf[0];
+    } else {
+        tmp = buf;
+    }
+    var ret = (tmp & 0x80) ? 1 : 0
+    return ret;
+}
+
+function shift_left_1(buf) {
+    var len = buf.length;
+    var ret = new Buffer(len);
+
+    for(var i=0; i< len; i++) {
+        ret[i]  = buf[i] << 1;
+        if( i+1 < buf.length && (MSB(buf[i+1]) != 0)) {
+            ret[i] |= 0x01;
+        }
+    }
+    return ret;
+}
+
+
+
+function generate_subkey(K) {
+
+    var const_zero = new Buffer(16);
+    const_zero.fill(0);
+    var const_Rb = 0x87;
+    //var const_zero = new Buffer('00000000000000000000000000000000', 'hex');
+    //var const_Rb   = new Buffer('00000000000000000000000000000087', 'hex');
+
+    //Step 1. L = aes-128(K, consta_zero)
+    var L = aes_cbc_encrypt(K, const_zero);
+
+    //Step 2. if MSB(L) == 0
+    //        then K1 = L << 1
+    //        else K1 = (L << 1) XOR const Rb
+    var K1 = shift_left_1(L);
+    if(MSB(L) == 1) {
+        K1[K1.length-1] ^= const_Rb;
+    }
+
+    //Step 3. if MSB(K1) == 0
+    //        then K2 = K1 << 1
+    //        else K2 = (K1 << 1) XOR const Rb
+    var K2 = shift_left_1(K1);
+    if(MSB(K1) == 1) {
+        K2[K2.length-1] ^= const_Rb;
+    }
+
+    //Step 4. return k1, k2
+    return {
+        K1: K1,
+        K2: K2
+    };
+}
+
+
+/**
+ *
+ * @param key
+ * @param M
+ * @returns {Buffer}
+ */
+function aes_cmac(key, data) {
+    //RFC 4493 The AES-CMAC algorithm http://www.ietf.org/rfc/rfc4493.txt
+    //NIST SP 800-38B The CMAC Mode for Authentication http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
+    //FIXME plz implement me
+    var const_Bsize = 16;
+    //var const_zero = new Buffer(16).fill(0);
+    var const_zero = new Buffer(16);
+    const_zero.fill(0);
+
+    //Step 1. [K1, K2] = generate_subkey(key)
+    var keys = generate_subkey(key);
+    var K1 = keys['K1'];
+    var K2 = keys['K2'];
+
+    //Step 2. n = ceil(len/const_Bsize)
+    var M = data; //new Buffer(data.length).fill(0);
+    var len = M.length;
+    var n = Math.ceil(len/const_Bsize);
+
+    //Step 3. if n = 0
+    //        then  n = 1; falg = false;
+    //        else
+    //            if len mod const_Bsize == 0
+    //            then flag = true
+    //            else flag = false
+    var flag; // complete block flag
+    if ( n == 0 ){
+        n = 1;
+        flag = false;
+    } else {
+        if( len % const_Bsize == 0) {
+            flag = true;
+        } else {
+            //n += 1;
+            flag = false
+        }
+    }
+
+    //Step 4. if flag is true
+    //        then M_last = M_n xor K1;
+    //        else M_last = aes_padding(M_n) xor K2;
+    var offset = (n-1) * const_Bsize;
+    var M_n = M.slice(offset);
+
+    var M_last;
+    if (flag == true) {
+        M_last = xor(M_n, K1);
+    } else {
+        M_last = xor(aes_padding(M_n), K2);
+    }
+
+    //Step 5. X = const_zero
+    var X= const_zero;
+
+    var Y;
+
+    //Step 6. for (i=1 i<n-1; i++)
+    //            Y = X xor M_i
+    //            X = aes-128(K, Y)
+    //        Y = M_last xor X
+    //        T = AES-128(K, Y)
+    var M_i;
+    for(var i=0; i<n-1; i++) {
+        M_i = M.slice(i * const_Bsize);
+        Y = xor(X, M_i);
+        X = aes_cbc_encrypt(key, Y);
+    }
+    Y = xor(M_last, X);
+    //Step 7. return T
+    return aes_cbc_encrypt(key, Y);
 }
 
 /**
@@ -456,19 +607,20 @@ function aes_padding(buff) {
     var data_with_padding = Buffer.concat([buff, extra_buf]);
     data_with_padding[buff.length] = 0x80;
     return data_with_padding;
+
 }
 
 /**
  *
- * @param {Buffer} arr1
- * @param {Buffer} arr2
- * @returns {Buffer}
+ * @param {buffer} arr1
+ * @param {buffer} arr2
+ * @returns {buffer}
  */
 function xor(arr1, arr2) {
     var ret = [];
     var len = (arr1.length > arr2.length) ? (arr2.length) : (arr1.length);
     for (var i = 0; i < len; i++) {
-        ret.push(arr1[i] ^ arr2[i]);
+        ret[i] = arr1[i] ^ arr2[i];
     }
 
     return new Buffer(ret);
@@ -483,6 +635,7 @@ module.exports  = {
 
     //random
     random: random,
+    pseudoRandom: pseudoRandom,
 
     //des
     des_ecb_encrypt: des_ecb_encrypt,
@@ -504,6 +657,7 @@ module.exports  = {
     des_mac: des_mac,
     des_mac_emv: des_mac_emv,
     aes_mac: aes_mac,
+    aes_cmac: aes_cmac,
 
     //padding
     des_padding: des_padding,
@@ -511,5 +665,7 @@ module.exports  = {
 
 
     //util
-    xor: xor
+    xor: xor,
+
+    shift_left_1: shift_left_1
 };
