@@ -445,7 +445,7 @@ result = crypto.aes_cmac(key, plain);
 
 logging(cipher.toString('hex'));
 logging(result.toString('hex'));
-//assert(result.toString('hex') == cipher.toString('hex'));
+assert(result.toString('hex') == cipher.toString('hex'));
 
 key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
 plain = new Buffer("000000000000000000000006000080010000000000000000B53CA38AD92EEFE5", 'hex');
@@ -455,6 +455,7 @@ result = crypto.aes_cmac(key, plain);
 
 logging(cipher.toString('hex'));
 logging(result.toString('hex'));
-//assert(result.toString('hex') == cipher.toString('hex'));
-
+assert(result.toString('hex') == cipher.toString('hex'));
 logging('-------------------------------------------------------------------------------------------------------------');
+
+
