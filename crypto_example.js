@@ -44,7 +44,6 @@ hash = crypto.hash('sha1', message);
 logging(hash.toString('hex'));
 assert(hash.toString('hex') == ref.toString('hex'));
 
-
 message = new Buffer("61", 'hex');
 ref = new Buffer("86F7E437FAA5A7FCE15D1DDCB9EAEAEA377667B8", 'hex');
 hash = crypto.hash('sha1', message);
@@ -466,4 +465,4 @@ logging(cipher.toString('hex'));
 logging(result.toString('hex'));
 //assert(result.toString('hex') == cipher.toString('hex'));
 
-logging('-------------------------------------------------------------------------------------------------------------');
+logging('------------------------------------------------------------------------------------------------------------');
