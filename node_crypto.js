@@ -377,6 +377,27 @@ function aes_ctr_decrypt(key, input, iv) {
     decipher.setAutoPadding(false);
     return decipher.update(input);
 }
+//----------------------------------------------------------------------------------------------------------------------
+// seed
+//----------------------------------------------------------------------------------------------------------------------
+function seed_cbc_encrypt(key, input, iv) {
+    if(iv === undefined){
+        iv = new Buffer(8);
+        iv.fill(0);
+    }
+    var cipher = crypto.createCipheriv('seed-ecb', key, '');
+    return cipher.update(input);
+}
+
+function seed_cbc_decrypt(key, input, iv) {
+    if(iv === undefined){
+        iv = new Buffer(16);
+        iv.fill(0);
+    }
+    var cipher = crypto.createDecipheriv('seed-ecb', key, iv);
+    return cipher.update(input);
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // mac
@@ -427,14 +448,12 @@ function des_mac(key, data) {
  * This is also known as the Retail MAC. It is as defined in [ISO 9797-1] as MAC Algorithm 3 with output
  * transformation 3, without truncation, and with DES taking the place of the block cipher.
  */
-function des_mac_emv(key, data, needpadding){
-    if(needpadding !== undefined || needpadding == true) {
-        data = des_padding(data);
-    }
-
+function des_mac_emv(key, data){
     var key1 = key.slice(0, 8); // for single des key
     var iv = new Buffer(8);
     iv.fill(0);
+
+    data = des_padding(data);
 
     var singledes = des_cbc_encrypt(key1, data, iv);
     var block = data.slice(data.length-8, data.length);
@@ -451,6 +470,8 @@ function des_mac_emv(key, data, needpadding){
  */
 function aes_mac(key, data) {
     //http://en.wikipedia.org/wiki/CMAC
+    data = aes_padding(data);
+    console.log('step 3-4: E_PCD PADDING: ' + data.toString('hex').toUpperCase());
     var result = aes_cbc_encrypt(key, data);
     return result.slice(result.length-16, result.length);
 }
@@ -596,6 +617,45 @@ function aes_cmac(key, data) {
     return aes_cbc_encrypt(key, Y);
 }
 
+function pad() {
+
+}
+
+/**
+ *
+ * @param {buffer} buff
+ * @param {number} block_size
+ * @returns {Buffer}
+ */
+function ISO9797Method_1(buff, block_size) {
+
+    var padd_len = block_size - (buff.length % block_size);
+    if(padd_len == block_size) {
+        return buff;
+    }
+    var pad = new Buffer(padd_len);
+    pad.fill(0);
+
+    return Buffer.concat([buff, pad])
+}
+
+/**
+ *
+ * @param {buffer} buff
+ * @param {number} block_size
+ * @returns {Buffer}
+ */
+function ISO9797Method_2(buff, block_size) {
+    var padd_len  = (block_size - ((buff.length + 1) % block_size)) + 1;
+    var pad = new Buffer(padd_len);
+    pad.fill(0);
+    pad[0] = 0x80;
+
+    var pad_buf = Buffer.concat([buff, pad]);
+    return pad_buf;
+}
+
+
 /**
  *
  * @param {buffer} buff
@@ -607,7 +667,6 @@ function des_padding(buff) {
     extra_buf.fill(0);
     var pad_buf = Buffer.concat([buff, extra_buf]);
     pad_buf[buff.length] = 0x80;
-    //console.log('des_padding: ' + pad_buf.toString('hex'));
     return pad_buf;
 }
 
@@ -623,7 +682,6 @@ function aes_padding(buff) {
     var data_with_padding = Buffer.concat([buff, extra_buf]);
     data_with_padding[buff.length] = 0x80;
     return data_with_padding;
-
 }
 
 /**
@@ -668,6 +726,10 @@ module.exports  = {
     aes_ctr_encrypt: aes_ctr_encrypt,
     aes_ctr_decrypt: aes_ctr_decrypt,
 
+    //seed
+    seed_cbc_encrypt: seed_cbc_encrypt,
+    seed_cbc_decrypt: seed_cbc_decrypt,
+
     //mac
     hmac: hmac,
     des_mac: des_mac,
@@ -676,6 +738,9 @@ module.exports  = {
     aes_cmac: aes_cmac,
 
     //padding
+    pad: pad,
+    ISO9797Method_1: ISO9797Method_1,
+    ISO9797Method_2: ISO9797Method_2,
     des_padding: des_padding,
     aes_padding: aes_padding,
 
