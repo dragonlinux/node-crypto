@@ -1,4 +1,11 @@
 /**
+ * DES
+ *  - des, triple des, des ecb, des cbc
+ *
+ * AES
+ *  aes 16, 24, 32 long key
+ *
+ *
  * Created by coolbong on 2014-05-26.
  */
 
@@ -383,6 +390,15 @@ function aes_ctr_decrypt(key, input, iv) {
  */
 function hmac(type, key, data) {
     return crypto.createHmac(type, key).update(data).digest();
+}
+
+/**
+ *
+ * @param key
+ * @param data
+ */
+function hmac_sha1(key, data) {
+    return crypto.createHmac('sha1', key).update(data).digest();
 }
 
 
