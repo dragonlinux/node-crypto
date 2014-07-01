@@ -22,7 +22,7 @@ var des2key = Buffer.concat([key1, key2]);
 var des3key = Buffer.concat([key1, key2, key3]);
 
 exports.des = {
-    'single des' : {
+    'single des ecb mode' : {
         'Single DES ECB Encrypt' : function() {
             // Single DES ECB encrypt
             plain = new Buffer("01A1D6D039776742", 'hex');
@@ -37,6 +37,49 @@ exports.des = {
             result = crypto.des_ecb_decrypt(deskey1, cipher);
 
             assert(result.toString('hex') == plain.toString('hex'));
-        }
+        },
+    },
+    'two key triple des ecb mode' : function() {
+        plain = new Buffer("01A1D6D039776742", 'hex');
+        cipher = plain;
+        cipher = crypto.des_ecb_encrypt(deskey1, cipher);
+        cipher = crypto.des_ecb_decrypt(deskey2, cipher);
+        cipher = crypto.des_ecb_encrypt(deskey1, cipher);
+
+        result = crypto.des_ecb_encrypt(des2key, plain);
+        assert(result.toString('hex') ==  cipher.toString('hex'));
+    },
+    'tree key triple des ecb mode' : function() {
+        plain = new Buffer("01A1D6D039776742", 'hex');
+        cipher = plain;
+        cipher = crypto.des_ecb_encrypt(deskey1, cipher);
+        cipher = crypto.des_ecb_decrypt(deskey2, cipher);
+        cipher = crypto.des_ecb_encrypt(deskey3, cipher);
+
+        result = crypto.des_ecb_encrypt(des3key, plain);
+        assert(result.toString('hex') ==  cipher.toString('hex'));
+    },
+
+    'single des cbc mode' : function() {
+        // Single DES ECB encrypt
+        plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
+        iv = new Buffer("59D9839733B8455D", 'hex');
+
+        v = plain.slice(0, 8);
+        v = crypto.xor(v, iv);
+        v = crypto.des_ecb_encrypt(deskey1, v);
+        cipher = v;
+
+        v = plain.slice(8, 16);
+        v = crypto.xor(cipher, v);
+        v = crypto.des_ecb_encrypt(deskey1, v);
+
+        cipher = Buffer.concat([cipher, v]);
+
+        result = crypto.des_cbc_encrypt(deskey1, plain, iv);
+        assert(result.toString('hex') == cipher.toString('hex'));
+
+        result = crypto.des_cbc_decrypt(deskey1, cipher, iv);
+        assert(result.toString('hex') == plain.toString('hex'));
     }
 };
