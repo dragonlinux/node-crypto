@@ -649,8 +649,7 @@ function ISO9797Method_2(buff, block_size) {
     pad.fill(0);
     pad[0] = 0x80;
 
-    var pad_buf = Buffer.concat([buff, pad]);
-    return pad_buf;
+    return  Buffer.concat([buff, pad]);
 }
 
 
