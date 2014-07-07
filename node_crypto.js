@@ -488,8 +488,7 @@ function MSB(buf) {
     } else {
         tmp = buf;
     }
-    var ret = (tmp & 0x80) ? 1 : 0
-    return ret;
+    return  (tmp & 0x80) ? 1 : 0;
 }
 
 function shift_left_1(buf) {
