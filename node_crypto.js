@@ -12,7 +12,6 @@
 var crypto = require('crypto');
 
 
-
 /*
  openssl encryption description
  - https://www.openssl.org/docs/apps/enc.html
@@ -43,8 +42,8 @@ function getSupportedCipher() {
 /**
  *
  * @param {String} hash
- * @param {buffer} buff
- * @returns {buffer}
+ * @param {Buffer} buff
+ * @returns {Buffer}
  */
 function hash( /* Buffer */ hash, /* Buffer */buff) {
     return crypto.createHash(hash).update(buff).digest();
@@ -57,7 +56,7 @@ function hash( /* Buffer */ hash, /* Buffer */buff) {
 /**
  *
  * @param {number} length
- * @returns {buffer}
+ * @returns {Buffer}
  */
 function random(/*number*/length) {
     return crypto.randomBytes(length);
@@ -66,7 +65,7 @@ function random(/*number*/length) {
 /**
  *
  * @param {number} length
- * @returns {buffer}
+ * @returns {Buffer}
  */
 function pseudoRandom(/*number*/ length) {
     return crypto.pseudoRandomBytes(length);
@@ -76,9 +75,9 @@ function pseudoRandom(/*number*/ length) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @returns {Buffer}
  */
 function des_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -103,9 +102,9 @@ function des_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @returns {Buffer}
  */
 function des_ecb_decrypt(key, input) {
     var cipherType = '';
@@ -132,10 +131,10 @@ function des_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function des_cbc_encrypt(key, input, iv) {
     //FXME try catch
@@ -166,15 +165,15 @@ function des_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function des_cbc_decrypt(key, input, iv) {
     var cipherType = '';
     if( key.length == 8) {
-        //one key triple des cbc
+        //one key des cbc
         cipherType = 'des-cbc';
     } else if( key.length == 16) {
         // Two key triple des cbc
@@ -202,20 +201,20 @@ function des_cbc_decrypt(key, input, iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @returns {Buffer}
  */
 function aes_ecb_encrypt(key, input) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit ecb mode
+        //128 bit key aes ecb mode
         cipherType = 'aes-128-ecb';
     } else if( key.length == 24) {
-        //192 bit ecb mode
+        //192 bit key aes ecb mode
         cipherType = 'aes-192-ecb';
     } else if (key.length == 32) {
-        //256 bit ecb mode
+        //256 bit key aes ecb mode
         cipherType = 'aes-256-ecb';
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
@@ -229,20 +228,20 @@ function aes_ecb_encrypt(key, input) {
 
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @returns {Buffer}
  */
 function aes_ecb_decrypt(key, input) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit ecb mode
+        //128 bit key aes ecb mode
         cipherType = 'aes-128-ecb';
     } else if( key.length == 24) {
-        //192 bit ecb mode
+        //192 bit key aes ecb mode
         cipherType = 'aes-192-ecb';
     } else if (key.length == 32) {
-        //256 bit ecb mode
+        //256 bit key aes ecb mode
         cipherType = 'aes-256-ecb';
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
@@ -258,21 +257,21 @@ function aes_ecb_decrypt(key, input) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function aes_cbc_encrypt(key, input, iv) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit cbc mode
+        //128 bit key aes cbc mode
         cipherType = 'aes-128-cbc';
     } else if( key.length == 24) {
-        //192 bit cbc mode
+        //192 bit key aes cbc mode
         cipherType = 'aes-192-cbc';
     } else if (key.length == 32) {
-        //256 bit cbc mode
+        //256 bit key aes cbc mode
         cipherType = 'aes-256-cbc';
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
@@ -291,21 +290,21 @@ function aes_cbc_encrypt(key, input, iv) {
 
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function aes_cbc_decrypt(key, input,iv) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit ecb mode
+        //128 bit key aes ecb mode
         cipherType = 'aes-128-cbc';
     } else if( key.length == 24) {
-        //192 bit cbc mode
+        //192 bit key aes cbc mode
         cipherType = 'aes-192-cbc';
     } else if (key.length == 32) {
-        //256 bit cbc mode
+        //256 bit key aes cbc mode
         cipherType = 'aes-256-cbc';
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
@@ -325,21 +324,21 @@ function aes_cbc_decrypt(key, input,iv) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function aes_ctr_encrypt(key, input, iv) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit ctr mode
+        //128 bit key aes ctr mode
         cipherType = 'aes-128-ctr';
     } else if( key.length == 24) {
-        //192 bit ctr mode
+        //192 bit key aes ctr mode
         cipherType = 'aes-192-ctr';
     } else if (key.length == 32) {
-        //256 bit ctr mode
+        //256 bit key aes ctr mode
         cipherType = 'aes-256-ctr'
     } else {
         console.log('key length is invalid. must set to be 16, 24, 32');
@@ -352,21 +351,21 @@ function aes_ctr_encrypt(key, input, iv) {
 }
 /**
  *
- * @param {buffer} key
- * @param {buffer} input
- * @param {buffer} iv
- * @returns {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} input
+ * @param {Buffer} iv
+ * @returns {Buffer}
  */
 function aes_ctr_decrypt(key, input, iv) {
     var cipherType = '';
     if( key.length == 16) {
-        //128 bit ctr mode
+        //128 bit key aes ctr mode
         cipherType = 'aes-128-ctr';
     } else if( key.length == 24) {
-        //192 bit ctr mode
+        //192 bit key aes ctr mode
         cipherType = 'aes-192-ctr';
     } else if (key.length == 32) {
-        //256 bit ctr mode
+        //256 bit key aes ctr mode
         cipherType = 'aes-256-ctr';
     } else {
         console.log('key length is invalid. must set to be 16, 24. 32');
@@ -405,9 +404,9 @@ function seed_cbc_decrypt(key, input, iv) {
 /**
  *
  * @param {String} type 'sha1', 'sha256', 'md5'
- * @param key 'key'
- * @param data
- * @returns {buffer}
+ * @param {Buffer} key 'key'
+ * @param {Buffer} data
+ * @returns {Buffer}
  */
 function hmac(type, key, data) {
     return crypto.createHmac(type, key).update(data).digest();
@@ -415,8 +414,8 @@ function hmac(type, key, data) {
 
 /**
  *
- * @param key
- * @param data
+ * @param {Buffer} key
+ * @param {Buffer} data
  */
 function hmac_sha1(key, data) {
     return crypto.createHmac('sha1', key).update(data).digest();
@@ -431,9 +430,9 @@ function hmac_sha1(key, data) {
  * http://en.wikipedia.org/wiki/CBC-MAC
  * http://www.freesoft.org/CIE/RFC/1510/83.htm
  *
- * @param key
- * @param data
- * @return {buffer}
+ * @param {Buffer} key
+ * @param {Buffer} data
+ * @return {Buffer}
  */
 function des_mac(key, data) {
     data = des_padding(data);
@@ -447,6 +446,9 @@ function des_mac(key, data) {
  * Single DES Plus Final Triple DES with the C-MAC
  * This is also known as the Retail MAC. It is as defined in [ISO 9797-1] as MAC Algorithm 3 with output
  * transformation 3, without truncation, and with DES taking the place of the block cipher.
+ *
+ * @param {Buffer} key
+ * @param {Buffer} data
  */
 function des_mac_emv(key, data){
     var key1 = key.slice(0, 8); // for single des key
@@ -464,14 +466,15 @@ function des_mac_emv(key, data){
 
 
 /**
- * \
- * @param key
- * @param data
+ * http://en.wikipedia.org/wiki/CMAC
+ * https://code.google.com/p/impacket/source/browse/trunk/impacket/crypto.py?r=707
+ *
+ * @param {Buffer} key
+ * @param {Buffer} data
  */
 function aes_mac(key, data) {
     //http://en.wikipedia.org/wiki/CMAC
     data = aes_padding(data);
-    console.log('step 3-4: E_PCD PADDING: ' + data.toString('hex').toUpperCase());
     var result = aes_cbc_encrypt(key, data);
     return result.slice(result.length-16, result.length);
 }
@@ -542,13 +545,12 @@ function generate_subkey(K) {
 /**
  *
  * @param key
- * @param M
+ * @param data
  * @returns {Buffer}
  */
 function aes_cmac(key, data) {
     //RFC 4493 The AES-CMAC algorithm http://www.ietf.org/rfc/rfc4493.txt
     //NIST SP 800-38B The CMAC Mode for Authentication http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
-    //FIXME plz implement me
     var const_Bsize = 16;
     //var const_zero = new Buffer(16).fill(0);
     var const_zero = new Buffer(16);
@@ -617,13 +619,9 @@ function aes_cmac(key, data) {
     return aes_cbc_encrypt(key, Y);
 }
 
-function pad() {
-
-}
-
 /**
  *
- * @param {buffer} buff
+ * @param {Buffer} buff
  * @param {number} block_size
  * @returns {Buffer}
  */
@@ -641,7 +639,7 @@ function ISO9797Method_1(buff, block_size) {
 
 /**
  *
- * @param {buffer} buff
+ * @param {Buffer} buff
  * @param {number} block_size
  * @returns {Buffer}
  */
@@ -658,37 +656,27 @@ function ISO9797Method_2(buff, block_size) {
 
 /**
  *
- * @param {buffer} buff
- * @return {buffer}
+ * @param {Buffer} data
+ * @return {Buffer}
  */
-function des_padding(buff) {
-    var target_len  = (8 - ((buff.length + 1) % 8)) + 1;
-    var extra_buf = new Buffer(target_len);
-    extra_buf.fill(0);
-    var pad_buf = Buffer.concat([buff, extra_buf]);
-    pad_buf[buff.length] = 0x80;
-    return pad_buf;
+function des_padding(data) {
+    return ISO9797Method_2(data, 8);
 }
 
 /**
  *
- * @param {buffer} buff
- * @return {buffer}
+ * @param {Buffer} data
+ * @return {Buffer}
  */
-function aes_padding(buff) {
-    var target_len  = (16 - ((buff.length + 1) % 16)) + 1;
-    var extra_buf = new Buffer(target_len);
-    extra_buf.fill(0);
-    var data_with_padding = Buffer.concat([buff, extra_buf]);
-    data_with_padding[buff.length] = 0x80;
-    return data_with_padding;
+function aes_padding(data) {
+    return ISO9797Method_2(data, 16);
 }
 
 /**
  *
- * @param {buffer} arr1
- * @param {buffer} arr2
- * @returns {buffer}
+ * @param {Buffer} arr1
+ * @param {Buffer} arr2
+ * @returns {Buffer}
  */
 function xor(arr1, arr2) {
     var ret = [];
@@ -717,7 +705,6 @@ module.exports  = {
     des_cbc_encrypt: des_cbc_encrypt,
     des_cbc_decrypt: des_cbc_decrypt,
 
-
     //aes
     aes_ecb_encrypt: aes_ecb_encrypt,
     aes_ecb_decrypt: aes_ecb_decrypt,
@@ -732,13 +719,13 @@ module.exports  = {
 
     //mac
     hmac: hmac,
+    hmac_sha1: hmac_sha1,
     des_mac: des_mac,
     des_mac_emv: des_mac_emv,
     aes_mac: aes_mac,
     aes_cmac: aes_cmac,
 
     //padding
-    pad: pad,
     ISO9797Method_1: ISO9797Method_1,
     ISO9797Method_2: ISO9797Method_2,
     des_padding: des_padding,
