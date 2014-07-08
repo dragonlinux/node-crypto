@@ -686,6 +686,16 @@ function xor(arr1, arr2) {
     return new Buffer(ret);
 }
 
+/**
+ * int to hexa string.
+ *
+ * @param {Number} num
+ * @returns {string}
+ */
+function toHex(num) {
+    return ("0" + (Number(num).toString(16))).slice(-2).toUpperCase();
+}
+
 
 module.exports  = {
     getSupportedHashes: getSupportedHashes,
@@ -732,6 +742,7 @@ module.exports  = {
 
     //util
     xor: xor,
+    toHex : toHex,
 
     shift_left_1: shift_left_1
 };
