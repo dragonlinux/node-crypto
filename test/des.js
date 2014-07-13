@@ -59,7 +59,6 @@ exports.des = {
         result = crypto.des_ecb_encrypt(des3key, plain);
         assert(result.toString('hex') ==  cipher.toString('hex'));
     },
-
     'single des cbc mode' : function() {
         // Single DES ECB encrypt
         plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
