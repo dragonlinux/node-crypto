@@ -7,16 +7,6 @@ var crypto = require('./node_crypto');
 
 var log_flag = true;
 
-function xor(arr1, arr2) {
-    var ret = [];
-    var len = (arr1.length > arr2.length) ? (arr2.length) : (arr1.length);
-    for (var i = 0; i < len; i++) {
-        ret.push(arr1[i] ^ arr2[i]);
-    }
-
-    return new Buffer(ret);
-}
-
 
 function logging(str) {
     if(log_flag)
@@ -223,13 +213,13 @@ plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
 iv = new Buffer("59D9839733B8455D", 'hex');
 
 v = plain.slice(0, 8);
-v = xor(v, iv);
+v = crypto.xor(v, iv);
 v = crypto.des_ecb_encrypt(deskey1, v);
 cipher = v;
 logging("des ecb 1: " + v.toString('hex'));
 
 v = plain.slice(8, 16);
-v = xor(cipher, v);
+v = crypto.xor(cipher, v);
 v = crypto.des_ecb_encrypt(deskey1, v);
 logging("des ecb 2: " + v.toString('hex'));
 
@@ -424,14 +414,14 @@ block2 = plain.slice(plain.length - 8, plain.length);
 
 
 cipher = crypto.des_cbc_encrypt(deskey1, plain, iv);
-cipher = xor(cipher, block2);
+cipher = crypto.xor(cipher, block2);
 cipher = crypto.des_ecb_encrypt(des2key, cipher);
 //FIXME check this assert mac api changed padding is default
 //assert(result.toString('hex') == cipher.toString('hex'));
 
 
 cipher = crypto.des_ecb_encrypt(deskey1, block1);
-cipher = xor(cipher, block2);
+cipher = crypto.xor(cipher, block2);
 
 cipher = crypto.des_ecb_encrypt(deskey1, cipher);
 cipher = crypto.des_ecb_decrypt(deskey2, cipher);
