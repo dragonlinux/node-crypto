@@ -12,6 +12,7 @@ var key3 = new Buffer("9DC1376E0131D961", 'hex');
 var plain;
 var cipher;
 var result;
+var iv;
 
 // Create three single DES keys, a double DES key and a triple DES key
 var deskey1 = key1;
@@ -37,7 +38,7 @@ exports.des = {
             result = crypto.des_ecb_decrypt(deskey1, cipher);
 
             assert(result.toString('hex') == plain.toString('hex'));
-        },
+        }
     },
     'two key triple des ecb mode' : function() {
         plain = new Buffer("01A1D6D039776742", 'hex');
@@ -59,11 +60,11 @@ exports.des = {
         result = crypto.des_ecb_encrypt(des3key, plain);
         assert(result.toString('hex') ==  cipher.toString('hex'));
     },
-
     'single des cbc mode' : function() {
         // Single DES ECB encrypt
         plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
         iv = new Buffer("59D9839733B8455D", 'hex');
+        var v;
 
         v = plain.slice(0, 8);
         v = crypto.xor(v, iv);
