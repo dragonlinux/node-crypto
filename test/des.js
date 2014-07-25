@@ -82,5 +82,63 @@ exports.des = {
 
         result = crypto.des_cbc_decrypt(deskey1, cipher, iv);
         assert(result.toString('hex') == plain.toString('hex'));
+    },
+    'des mac' : function() {
+        //test 1
+        var key = new Buffer("21F347F04A223FEFEAC7857E057EA42A", 'hex');
+        var plain = new Buffer("8482000010CA5225B746F24411", 'hex');
+        var desmac = new Buffer("D75C127C2959176C", 'hex');
+
+        var result = crypto.des_mac(key, plain);
+        assert(result.toString('hex') == desmac.toString('hex'));
+
+        key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
+        plain = new Buffer("00010203040506074041424344454647", 'hex');
+        var iv   = new Buffer("0000000000000000", 'hex');
+
+        //test 2
+        var plain_padd = crypto.des_padding(plain);
+        var cipher = crypto.des_cbc_encrypt(key, plain_padd, iv);
+        cipher = cipher.slice(cipher.length-8, cipher.length);
+
+        result = crypto.des_mac(key, plain);
+        assert(result.toString('hex') == cipher.toString('hex'));
+
+        // test 3
+        key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
+        var host_challenge = new Buffer("0001020304050607", 'hex');
+        var card_challege = new Buffer("08090A0B0C0D0E0F", 'hex');
+
+        cipher = new Buffer("D0AEF0167D590E74", 'hex');
+        plain = Buffer.concat([host_challenge, card_challege]);
+
+        result = crypto.des_mac(key, plain);
+    },
+    ' Retail MAC' : function() {
+        var plain = new Buffer("Hello World !!!!", 'ascii');
+        var iv = new Buffer("0000000000000000", 'hex');
+
+        var result = crypto.des_mac_emv(des2key, plain);
+
+
+        var block1 = plain.slice(0, 8);
+        var block2 = plain.slice(plain.length - 8, plain.length);
+
+
+        var cipher = crypto.des_cbc_encrypt(deskey1, plain, iv);
+        cipher = crypto.xor(cipher, block2);
+        cipher = crypto.des_ecb_encrypt(des2key, cipher);
+        //FIXME check this assert mac api changed padding is default
+        assert(result.toString('hex') == cipher.toString('hex'));
+
+        cipher = crypto.des_ecb_encrypt(deskey1, block1);
+        cipher = crypto.xor(cipher, block2);
+
+        cipher = crypto.des_ecb_encrypt(deskey1, cipher);
+        cipher = crypto.des_ecb_decrypt(deskey2, cipher);
+        cipher = crypto.des_ecb_encrypt(deskey1, cipher);
+
+        //FIXME check this assert mac api changed padding is default
+        assert(result.toString('hex') == cipher.toString('hex'));
     }
 };
