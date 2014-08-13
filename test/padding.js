@@ -3,7 +3,7 @@
  */
 
 var crypto  = require('../node_crypto');
-var assert = require("assert");
+var assert = require('assert');
 
 
 exports.padding = {

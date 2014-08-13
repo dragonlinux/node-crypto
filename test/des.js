@@ -2,11 +2,11 @@
  * Created by coobong on 2014-06-25.
  */
 var crypto  = require('../node_crypto');
-var assert = require("assert");
+var assert = require('assert');
 
-var key1 = new Buffer("7CA110454A1A6E57", 'hex');
-var key2 = new Buffer("0131D9619DC1376E", 'hex');
-var key3 = new Buffer("9DC1376E0131D961", 'hex');
+var key1 = new Buffer('7CA110454A1A6E57', 'hex');
+var key2 = new Buffer('0131D9619DC1376E', 'hex');
+var key3 = new Buffer('9DC1376E0131D961', 'hex');
 
 //7CA110454A1A6E570131D9619DC1376E9DC1376E0131D961
 var plain;
@@ -26,22 +26,22 @@ exports.des = {
     'single des ecb mode' : {
         'Single DES ECB Encrypt' : function() {
             // Single DES ECB encrypt
-            plain = new Buffer("01A1D6D039776742", 'hex');
-            cipher = new Buffer("690F5B0D9A26939B", 'hex');
+            plain = new Buffer('01A1D6D039776742', 'hex');
+            cipher = new Buffer('690F5B0D9A26939B', 'hex');
             result = crypto.des_ecb_encrypt(deskey1, plain);
             //console.log('result: ' + result.toString('hex').toUpperCase());
             assert(result.toString('hex') ==  cipher.toString('hex'));
         },
         'Single DES ECB Descrypt' : function() {
             // Single DES ECB decrypt
-            plain = new Buffer("01A1D6D039776742", 'hex');
+            plain = new Buffer('01A1D6D039776742', 'hex');
             result = crypto.des_ecb_decrypt(deskey1, cipher);
 
             assert(result.toString('hex') == plain.toString('hex'));
         }
     },
     'two key triple des ecb mode' : function() {
-        plain = new Buffer("01A1D6D039776742", 'hex');
+        plain = new Buffer('01A1D6D039776742', 'hex');
         cipher = plain;
         cipher = crypto.des_ecb_encrypt(deskey1, cipher);
         cipher = crypto.des_ecb_decrypt(deskey2, cipher);
@@ -51,7 +51,7 @@ exports.des = {
         assert(result.toString('hex') ==  cipher.toString('hex'));
     },
     'three key triple des ecb mode' : function() {
-        plain = new Buffer("01A1D6D039776742", 'hex');
+        plain = new Buffer('01A1D6D039776742', 'hex');
         cipher = plain;
         cipher = crypto.des_ecb_encrypt(deskey1, cipher);
         cipher = crypto.des_ecb_decrypt(deskey2, cipher);
@@ -62,8 +62,8 @@ exports.des = {
     },
     'single des cbc mode' : function() {
         // Single DES ECB encrypt
-        plain = new Buffer("01A1D6D0397767423977674201A1D6D0", 'hex');
-        iv = new Buffer("59D9839733B8455D", 'hex');
+        plain = new Buffer('01A1D6D0397767423977674201A1D6D0', 'hex');
+        iv = new Buffer('59D9839733B8455D', 'hex');
         var v;
 
         v = plain.slice(0, 8);
@@ -85,16 +85,16 @@ exports.des = {
     },
     'des mac' : function() {
         //test 1
-        var key = new Buffer("21F347F04A223FEFEAC7857E057EA42A", 'hex');
-        var plain = new Buffer("8482000010CA5225B746F24411", 'hex');
-        var desmac = new Buffer("D75C127C2959176C", 'hex');
+        var key = new Buffer('21F347F04A223FEFEAC7857E057EA42A', 'hex');
+        var plain = new Buffer('8482000010CA5225B746F24411', 'hex');
+        var desmac = new Buffer('D75C127C2959176C', 'hex');
 
         var result = crypto.des_mac(key, plain);
         assert(result.toString('hex') == desmac.toString('hex'));
 
-        key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
-        plain = new Buffer("00010203040506074041424344454647", 'hex');
-        var iv   = new Buffer("0000000000000000", 'hex');
+        key = new Buffer('404142434445464748494A4B4C4D4E4F', 'hex');
+        plain = new Buffer('00010203040506074041424344454647', 'hex');
+        var iv   = new Buffer('0000000000000000', 'hex');
 
         //test 2
         var plain_padd = crypto.des_padding(plain);
@@ -105,19 +105,19 @@ exports.des = {
         assert(result.toString('hex') == cipher.toString('hex'));
 
         // test 3
-        key = new Buffer("404142434445464748494A4B4C4D4E4F", 'hex');
-        var host_challenge = new Buffer("0001020304050607", 'hex');
-        var card_challege = new Buffer("08090A0B0C0D0E0F", 'hex');
+        key = new Buffer('404142434445464748494A4B4C4D4E4F', 'hex');
+        var host_challenge = new Buffer('0001020304050607', 'hex');
+        var card_challege = new Buffer('08090A0B0C0D0E0F', 'hex');
 
-        cipher = new Buffer("D0AEF0167D590E74", 'hex');
+        cipher = new Buffer('D0AEF0167D590E74', 'hex');
         plain = Buffer.concat([host_challenge, card_challege]);
 
         result = crypto.des_mac(key, plain);
         assert(result.toString('hex') == cipher.toString('hex'));
     },
     ' Retail MAC' : function() {
-        var plain = new Buffer("Hello World !!!!", 'ascii');
-        var iv = new Buffer("0000000000000000", 'hex');
+        var plain = new Buffer('Hello World !!!!', 'ascii');
+        var iv = new Buffer('0000000000000000', 'hex');
 
         var result = crypto.des_mac_emv(des2key, plain);
 
