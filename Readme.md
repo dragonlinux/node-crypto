@@ -53,16 +53,16 @@ function hash( /* Buffer */ hash, /* Buffer */buff) {
 
 ```
 // sha1 hash
-message = new Buffer("", "hex");
-answer = new Buffer("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", "hex");
+message = new Buffer('', 'hex');
+answer = new Buffer('DA39A3EE5E6B4B0D3255BFEF95601890AFD80709', 'hex');
 result = hash('sha1', message);
 assert(answer.toString('hex') == result.toString('hex'));
 ```
 
 ```
 // sha1 hash
-message = new Buffer("hello world", "hex");
-answer = new Buffer("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", "hex");
+message = new Buffer('hello world', 'hex');
+answer = new Buffer('DA39A3EE5E6B4B0D3255BFEF95601890AFD80709', 'hex');
 result = hash('sha1', message);
 assert(answer.toString('hex') == result.toString('hex'));
 ```
@@ -71,8 +71,8 @@ assert(answer.toString('hex') == result.toString('hex'));
 
 ```
 // sha224 hash
-message = new Buffer("616263", "hex");
-answer = new Buffer("23097D223405D8228642A477BDA255B32AADBCE4BDA0B3F7E36C9DA7", "hex");
+message = new Buffer('616263', 'hex');
+answer = new Buffer('23097D223405D8228642A477BDA255B32AADBCE4BDA0B3F7E36C9DA7', 'hex');
 result = hash('sha224', message);
 assert(answer.toString('hex') == result.toString('hex'));
 ```
@@ -80,8 +80,8 @@ assert(answer.toString('hex') == result.toString('hex'));
 
 - nodejs md5 hash example
 ```
-message = new Buffer("", 'hex');
-answer = new Buffer("D41D8CD98F00B204E9800998ECF8427E", 'hex');
+message = new Buffer('', 'hex');
+answer = new Buffer('D41D8CD98F00B204E9800998ECF8427E', 'hex');
 result = hash('md5', message);
 assert(answer.toString('hex') == result.toString('hex'));
 ```
