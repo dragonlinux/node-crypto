@@ -19,7 +19,7 @@ nodejs crypto example
 - RSA Private Key
 
 #Examples  and test
- - you can find some example in test directory.
+ - you can find some examples in test directory.
   - test/hash.js
   - test/des.js
   - test/aes.js
@@ -35,7 +35,7 @@ _mocha --ui exports ./test
 
 ## Hash Example
 
-- hash wrapper
+- hash wrapper API
 
 ```
 /**
