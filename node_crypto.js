@@ -693,7 +693,7 @@ function xor(arr1, arr2) {
  * @returns {string}
  */
 function toHex(num) {
-    return ("0" + (Number(num).toString(16))).slice(-2).toUpperCase();
+    return ('0' + (Number(num).toString(16))).slice(-2).toUpperCase();
 }
 
 
