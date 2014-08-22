@@ -74,10 +74,11 @@ function pseudoRandom(/*number*/ length) {
 // des - ecb
 //----------------------------------------------------------------------------------------------------------------------
 /**
+ * DES.
  *
- * @param {Buffer} key
- * @param {Buffer} input
- * @returns {Buffer}
+ * @param {Buffer} key key value
+ * @param {Buffer} input message
+ * @returns {Buffer} des encrypted data
  */
 function des_ecb_encrypt(key, input) {
     var cipherType = '';
@@ -97,7 +98,24 @@ function des_ecb_encrypt(key, input) {
 
     var cipher = crypto.createCipheriv(cipherType, key, '');
     cipher.setAutoPadding(false);
+
     return cipher.update(input);
+
+    /*
+    var update = cipher.update(input, 'binary', 'hex');
+    var final = cipher.final('hex');
+
+    console.log('des cipher: update', update);
+    console.log('des cipher: final', final);
+
+    //var ret = cipher.update(input, 'binary', 'hex');
+    //console.log(" ecb encrypt(update) : " + ret);
+    //ret += cipher.final('hex');
+    //console.log(" ecb encrypt(final) : " + ret);
+    //return ret;
+
+    return new Buffer(update + final, 'hex');
+    */
 }
 
 /**

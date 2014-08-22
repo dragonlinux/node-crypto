@@ -38,7 +38,22 @@ exports.des = {
             result = crypto.des_ecb_decrypt(deskey1, cipher);
 
             assert(result.toString('hex') == plain.toString('hex'));
+        },
+        'Single DES ECB Encrypt 2' : function() {
+            plain = new Buffer('hello world', 'ascii');
+            //console.log(plain.toString('hex').toUpperCase());
+            //cipher = new Buffer('690F5B0D9A26939B', 'hex');
+            //result = crypto.des_ecb_encrypt(deskey1, plain);
+            //assert(result.toString('hex') ==  cipher.toString('hex'));
+        },
+        'Single DES ECB Descrypt 2' : function() {
+            // Single DES ECB decrypt
+            plain = new Buffer('hello world', 'ascii');
+            //result = crypto.des_ecb_decrypt(deskey1, cipher);
+
+            //assert(result.toString('hex') == plain.toString('hex'));
         }
+
     },
     'two key triple des ecb mode' : function() {
         plain = new Buffer('01A1D6D039776742', 'hex');

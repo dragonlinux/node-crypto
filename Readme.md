@@ -87,6 +87,54 @@ assert(answer.toString('hex') == result.toString('hex'));
 ```
 
 
+## DES Example
+
+- DES wrapper API
+
+```
+/**
+ * DES.
+ *
+ * @param {Buffer} key key value
+ * @param {Buffer} input message
+ * @returns {Buffer} des encrypted data
+ */
+function des_ecb_encrypt(key, input) {
+    var cipherType = '';
+    if( key.length == 8) {
+        //one key des ecb
+        cipherType = 'des-ecb';
+    } else if( key.length == 16) {
+        // Two key triple des ecb
+        cipherType = 'des-ede';
+    } else if (key.length == 24) {
+        //Three key triple des ecb
+        cipherType = 'des-ede3'
+    } else {
+        console.log('key length is invalid. must set to be 8, 16, 24');
+        return null;
+    }
+
+    var cipher = crypto.createCipheriv(cipherType, key, '');
+    cipher.setAutoPadding(false);
+    return cipher.update(input);
+}
+```
+
+
+- nodejs single DES ECB example
+
+```
+// Single des ecb example
+key1 = new Buffer('7CA110454A1A6E57', 'hex');
+plain = new Buffer('01A1D6D039776742', 'hex');
+cipher = new Buffer('690F5B0D9A26939B', 'hex');
+
+result = des_ecb_encrypt(key1, plain);
+
+assert(result.toString('hex') ==  cipher.toString('hex'));
+```
+
 ##history
 - added test framework : [mocha](http://visionmedia.github.io/mocha/)
 
