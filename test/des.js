@@ -38,22 +38,7 @@ exports.des = {
             result = crypto.des_ecb_decrypt(deskey1, cipher);
 
             assert(result.toString('hex') == plain.toString('hex'));
-        },
-        'Single DES ECB Encrypt 2' : function() {
-            plain = new Buffer('hello world', 'ascii');
-            //console.log(plain.toString('hex').toUpperCase());
-            //cipher = new Buffer('690F5B0D9A26939B', 'hex');
-            //result = crypto.des_ecb_encrypt(deskey1, plain);
-            //assert(result.toString('hex') ==  cipher.toString('hex'));
-        },
-        'Single DES ECB Descrypt 2' : function() {
-            // Single DES ECB decrypt
-            plain = new Buffer('hello world', 'ascii');
-            //result = crypto.des_ecb_decrypt(deskey1, cipher);
-
-            //assert(result.toString('hex') == plain.toString('hex'));
         }
-
     },
     'two key triple des ecb mode' : function() {
         plain = new Buffer('01A1D6D039776742', 'hex');
@@ -65,6 +50,28 @@ exports.des = {
         result = crypto.des_ecb_encrypt(des2key, plain);
         assert(result.toString('hex') ==  cipher.toString('hex'));
     },
+    'two key triple des ecb mode 2' : function() {
+
+        var key = new Buffer('505152535455565758595A5B5C5D5E5F', 'hex');
+        var key1 = new Buffer('5051525354555657', 'hex');
+        var key2 = new Buffer('58595A5B5C5D5E5F', 'hex');
+        plain = new Buffer('20141027', 'ascii');
+        //console.log(plain.toString('hex'));
+        cipher = plain;
+
+        cipher = crypto.des_ecb_encrypt(key1, cipher);
+        cipher = crypto.des_ecb_decrypt(key2, cipher);
+        cipher = crypto.des_ecb_encrypt(key1, cipher);
+
+        result = crypto.des_ecb_encrypt(key, plain);
+
+        //console.log('result: ' + result.toString('hex'));
+        //console.log('  cipher: ' + cipher.toString('hex'));
+
+
+        assert(result.toString('hex') ==  cipher.toString('hex'));
+
+    },
     'three key triple des ecb mode' : function() {
         plain = new Buffer('01A1D6D039776742', 'hex');
         cipher = plain;
@@ -75,8 +82,18 @@ exports.des = {
         result = crypto.des_ecb_encrypt(des3key, plain);
         assert(result.toString('hex') ==  cipher.toString('hex'));
     },
-    'single des cbc mode' : function() {
-        // Single DES ECB encrypt
+    'single des cbc encrypt 1' : function() {
+        // Single DES CBC encrypt
+        plain = new Buffer('01A1D6D0397767423977674201A1D6D0', 'hex');
+        iv = new Buffer('59D9839733B8455D', 'hex');
+
+        cipher = new Buffer('3A5A2EEFE27ACE7B038F50F35BD7678E', 'hex');
+
+        result = crypto.des_cbc_encrypt(deskey1, plain, iv);
+        assert(result.toString('hex') == cipher.toString('hex'));
+    },
+    'single des cbc encrypt 2' : function() {
+        // Single DES CBC encrypt
         plain = new Buffer('01A1D6D0397767423977674201A1D6D0', 'hex');
         iv = new Buffer('59D9839733B8455D', 'hex');
         var v;
@@ -94,9 +111,15 @@ exports.des = {
 
         result = crypto.des_cbc_encrypt(deskey1, plain, iv);
         assert(result.toString('hex') == cipher.toString('hex'));
+        //console.log(result.toString('hex').toUpperCase());
 
         result = crypto.des_cbc_decrypt(deskey1, cipher, iv);
         assert(result.toString('hex') == plain.toString('hex'));
+    },
+    'single des cbc descrypt': function() {
+        plain = new Buffer('01A1D6D0397767423977674201A1D6D0', 'hex');
+        iv = new Buffer('59D9839733B8455D', 'hex');
+
     },
     'des mac' : function() {
         //test 1

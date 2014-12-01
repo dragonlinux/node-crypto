@@ -82,6 +82,18 @@ exports.hash = {
         answer = new Buffer('C3FCD3D76192E4007DFB496CCA67E13B', 'hex');
         result = crypto.hash('md5', message);
         assert(answer.toString('hex') == result.toString('hex'));
+    },
+    'hmac sha1' : function() {
+
+        //message = new Buffer('I love cupcakes', 'ascii');
+        //key = new Buffer('abcdefg', 'ascii');
+        message = new Buffer('', 'hex');
+        key = new Buffer('', 'hex');
+        result = crypto.hmac_sha1(key, message);
+        answer = new Buffer('fbdb1d1b18aa6c08324b7d64b71fb76370690e1d', 'hex');
+        //console.log(result.toString('hex').toUpperCase());
+        //console.log(answer.toString('hex').toUpperCase());
+        assert(answer.toString('hex') === result.toString('hex'));
     }
 
 };
