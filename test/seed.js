@@ -39,7 +39,7 @@ exports.seed = {
             //message = crypto.ISO9797Method_1(message, 16);
             //message = crypto.ISO9797Method_2(message, 16);
             result = crypto.seed_cbc_encrypt(key, message, iv);
-            console.log(result.toString('hex'));
+            //console.log(result.toString('hex'));
             assert(answer.toString('hex') == result.toString('hex'));
         },
         'seed cbc decrypt' : function() {
@@ -50,10 +50,39 @@ exports.seed = {
             answer = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
 
             result = crypto.seed_cbc_decrypt(key, message, iv);
-            console.log(result.toString('hex'));
+            //console.log(result.toString('hex'));
+            assert(answer.toString('hex') == result.toString('hex'));
+        },
+        'seed ecb encrypt with 80 padding': function() {
+            /*
+             40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+             12 34 00 00 01 00 00 80 00 00 00 00 00 00 00 00
+             6C 71 E6 0D EF 88 4C 34 C8 10 90 42 97 B4 4F 3C
+             12 34 00 00 01 00 00 80 00 00 00 00 00 00 00 00
+             */
+
+            message = new Buffer('12340000010000', 'hex');
+            key     = new Buffer('404142434445464748494A4B4C4D4E4F', 'hex');
+
+            answer = new Buffer('6C71E60DEF884C34C810904297B44F3C', 'hex');
+            message = crypto.ISO9797Method_2(message, 16);
+            result = crypto.seed_ecb_encrypt(key, message);
+
+            console.log('seed ecb: ' + result.toString('hex').toUpperCase());
+            //assert(answer.toString('hex') == result.toString('hex'));
+
+        },
+        'seed cbc encrypt with 80 padding' : function() {
+            message = new Buffer('12340000010000', 'hex');
+            key     = new Buffer('404142434445464748494A4B4C4D4E4F', 'hex');
+
+            answer = new Buffer('6C71E60DEF884C34C810904297B44F3C', 'hex');
+            message = crypto.ISO9797Method_2(message, 16);
+            result = crypto.seed_cbc_encrypt(key, message);
+
+            //console.log('seed cbc: ' + result.toString('hex').toUpperCase());
             assert(answer.toString('hex') == result.toString('hex'));
         }
-
     }
 };
 
