@@ -397,12 +397,25 @@ function aes_ctr_decrypt(key, input, iv) {
 //----------------------------------------------------------------------------------------------------------------------
 // seed
 //----------------------------------------------------------------------------------------------------------------------
+function seed_ecb_encrypt(key, input) {
+    var cipher = crypto.createCipheriv('seed-ecb', key, '');
+    cipher.setAutoPadding(false);
+    return cipher.update(input);
+}
+
+function seed_ecb_decrypt(key, input) {
+    var decipher = crypto.createDecipheriv('seed-ecb', key, '');
+    decipher.setAutoPadding(false);
+    return decipher.update(input);
+}
+
 function seed_cbc_encrypt(key, input, iv) {
     if(iv === undefined){
-        iv = new Buffer(8);
+        iv = new Buffer(16);
         iv.fill(0);
     }
-    var cipher = crypto.createCipheriv('seed-ecb', key, '');
+    var cipher = crypto.createCipheriv('seed-cbc', key, iv);
+    cipher.setAutoPadding(false);
     return cipher.update(input);
 }
 
@@ -411,8 +424,9 @@ function seed_cbc_decrypt(key, input, iv) {
         iv = new Buffer(16);
         iv.fill(0);
     }
-    var cipher = crypto.createDecipheriv('seed-ecb', key, iv);
-    return cipher.update(input);
+    var decipher = crypto.createDecipheriv('seed-cbc', key, iv);
+    decipher.setAutoPadding(false);
+    return decipher.update(input);
 }
 
 
@@ -740,6 +754,8 @@ module.exports  = {
     aes_ctr_decrypt: aes_ctr_decrypt,
 
     //seed
+    seed_ecb_encrypt: seed_ecb_encrypt,
+    seed_ecb_decrypt: seed_ecb_decrypt,
     seed_cbc_encrypt: seed_cbc_encrypt,
     seed_cbc_decrypt: seed_cbc_decrypt,
 

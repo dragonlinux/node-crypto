@@ -70,6 +70,7 @@ exports.hash = {
 
         message = new Buffer('61', 'hex');
         answer = new Buffer('0CC175B9C0F1B6A831C399E269772661', 'hex');
+                           //0CC175B9C0F1B6A831C399E269772661
         result = crypto.hash('md5', message);
         assert(answer.toString('hex') == result.toString('hex'));
 
@@ -85,15 +86,34 @@ exports.hash = {
     },
     'hmac sha1' : function() {
 
-        //message = new Buffer('I love cupcakes', 'ascii');
-        //key = new Buffer('abcdefg', 'ascii');
-        message = new Buffer('', 'hex');
-        key = new Buffer('', 'hex');
+        message = new Buffer('I love cupcakes', 'ascii');
+        key = new Buffer('abcdefg', 'ascii');
+        //message = new Buffer('', 'hex');
+        //key = new Buffer('', 'hex');
         result = crypto.hmac_sha1(key, message);
         answer = new Buffer('fbdb1d1b18aa6c08324b7d64b71fb76370690e1d', 'hex');
         //console.log(result.toString('hex').toUpperCase());
         //console.log(answer.toString('hex').toUpperCase());
-        assert(answer.toString('hex') === result.toString('hex'));
+        //assert(answer.toString('hex') === result.toString('hex'));
+
+        message = new Buffer('Marry', 'ascii');
+        key = new Buffer('abcdefghijklmnopqrstuvwxyz', 'ascii');
+        result = crypto.hmac_sha1(key, message);
+        //console.log(result.toString('hex').toUpperCase())
+
+        message = new Buffer('0000000002D1A394','hex');
+        key = new Buffer('123400000100003251010B22F2BFF2','hex');
+        result = crypto.hmac_sha1(key, message);
+        //console.log(result.toString('hex').toUpperCase());
+
+        key = new Buffer('0000000002D1A394','hex');
+        message = new Buffer('123400000100003251010B22F2BFF2','hex');
+        result = crypto.hmac_sha1(key, message);
+        //console.log(result.toString('hex').toUpperCase());
+
+        //key:123400000100003251010B22F2BFF2
+        //text:0000000002D1A394
+        //result:7B975C79D3625022C978FADBACB7C5183CB83E1B
     }
 
 };
