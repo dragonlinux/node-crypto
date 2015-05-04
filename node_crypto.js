@@ -675,12 +675,23 @@ function ISO9797Method_1(buff, block_size) {
  * @returns {Buffer}
  */
 function ISO9797Method_2(buff, block_size) {
+
+    var padd_len = block_size - (buff.length % block_size);
+
+    var pad = new Buffer(padd_len);
+    pad.fill(0);
+    pad[0] = 0x80;
+
+    return Buffer.concat([buff, pad]);
+
+    /*
     var padd_len  = (block_size - ((buff.length + 1) % block_size)) + 1;
     var pad = new Buffer(padd_len);
     pad.fill(0);
     pad[0] = 0x80;
 
     return  Buffer.concat([buff, pad]);
+    */
 }
 
 
