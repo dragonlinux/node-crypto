@@ -12,11 +12,16 @@ nodejs crypto example
 ## TODO
 - make it lib
 
+- CRC16/CRC32
+
 - hmac-sha1
 - hmac-sha1-160
 
-- RSA Public Key
-- RSA Private Key
+- RSA
+- RSACRT
+
+- Sign
+  - 
 
 #Examples  and test
  - you can find some examples in test directory.
