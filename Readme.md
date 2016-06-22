@@ -143,3 +143,5 @@ assert(result.toString('hex') ==  cipher.toString('hex'));
 ##history
 - added test framework : [mocha](http://visionmedia.github.io/mocha/)
 
+##其实可以node直接运行看到结果
+
