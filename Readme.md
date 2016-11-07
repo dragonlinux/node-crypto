@@ -145,3 +145,6 @@ assert(result.toString('hex') ==  cipher.toString('hex'));
 
 ##其实可以node直接运行看到结果
 - 安装下nodejs
+
+在nodejs里只要把库文件引入进去就可以使用了
+
